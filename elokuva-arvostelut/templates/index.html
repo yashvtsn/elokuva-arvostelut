@@ -21,8 +21,15 @@
   </p>
 
   <p>
-    <a href="/new_item">Uusi ilmoitus</a>
+    <a href="/new_item">Uusi arvostelu</a>
   </p>
+
+  <h2>Arvostelut</h2>
+  <ul>
+    {% for item in items %}
+    <li><a href ="/item/{{ item.id }}">{{ item.title }}</a></li>
+    {% endfor %}
+  </ul>
 </body>
 
 </html>

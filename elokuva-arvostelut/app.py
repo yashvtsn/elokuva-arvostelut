@@ -4,14 +4,20 @@ from flask import redirect, render_template, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import db
-
+import arvostelut
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    all_items = arvostelut.get_items()
+    return render_template("index.html", items = all_items)
+
+@app.route("/item/<int:item_id>")
+def show_item(item_id):
+    item = arvostelut.get_item(item_id)
+    return render_template("show_item.html", item=item)
 
 @app.route("/new_item")
 def new_item():
@@ -23,8 +29,7 @@ def create_item():
     review = request.form["review"]
     user_id = session["user_id"]
 
-    sql = """INSERT INTO reviews (title, review, user_id) VALUES (?, ?, ?)"""
-    db.execute(sql, [title, review, user_id])
+    arvostelut.add_item(title, review, user_id)
 
     return redirect("/")
 
