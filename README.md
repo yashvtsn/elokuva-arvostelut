@@ -10,3 +10,23 @@
 - Jokaisen käyttäjän sivulla näkyvät hänen kirjoittamansa arvostelut sekä niiden määrä.
 - Käyttäjä voi arvostella ja kirjoittaa kommentteja muiden käyttäjien arvosteluihin.
 - Jos elokuvaa, josta käyttäjä haluaa kirjoittaa arvostelun, ei ole vielä olemassa sivustolla, hän voi luoda sen itse lisäämällä elokuvan nimen ja liittämällä kuvan.
+
+## Sovelluksen asennus
+Asenna `flask`-kirjasto:
+
+```
+$ pip install flask
+```
+
+Luo tietokannan taulut ja lisää alkutiedot:
+
+```
+$ sqlite3 database.db < schema.sql
+$ sqlite3 database.db < init.sql
+```
+
+Voit käynnistää sovelluksen näin:
+
+```
+$ flask run
+```
