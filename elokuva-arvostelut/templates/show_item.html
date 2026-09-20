@@ -15,6 +15,7 @@
   {% if session.get("user_id") == item.user_id %}
 <p>
     <a href="{{ url_for('edit_item', item_id=item.id) }}">Muokkaa</a>
+    <a href="{{ url_for('remove_item', item_id=item.id) }}">Poista</a>
 </p>
 {% endif %}
 

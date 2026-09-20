@@ -42,6 +42,11 @@ def edit_item(item_id):
     item = arvostelut.get_item(item_id)
     return render_template("edit_item.html", item=item)
 
+@app.route("/remove_item/<int:item_id>")
+def remove_item(item_id):
+    arvostelut.remove_item(item_id)
+    return redirect("/")
+
 @app.route("/create", methods=["POST"])
 def create():
     username = request.form["username"]

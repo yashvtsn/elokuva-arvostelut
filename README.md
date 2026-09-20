@@ -22,10 +22,18 @@ Luo tietokannan taulut ja lisää alkutiedot:
 
 ```
 $ sqlite3 database.db < schema.sql
+<<<<<<< Updated upstream
+=======
+$ sqlite3 database.db < init.sql
+>>>>>>> Stashed changes
 ```
 
 Voit käynnistää sovelluksen näin:
 
 ```
 $ flask run
+<<<<<<< Updated upstream
 ```
+=======
+```
+>>>>>>> Stashed changes
