@@ -11,8 +11,15 @@
   <p>{{ item.review }}</p>
 
   <p>Kirjoittaja: {{ item.username }}</p>
+
+  {% if session.get("user_id") == item.user_id %}
+<p>
+    <a href="{{ url_for('edit_item', item_id=item.id) }}">Muokkaa</a>
+</p>
+{% endif %}
+
   <p>
-    <a href = "/">Takaisin</a>
+    <a href="/">Takaisin</a>
   </p>
 </body>
 

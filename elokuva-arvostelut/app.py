@@ -37,6 +37,11 @@ def create_item():
 def register():
     return render_template("register.html")
 
+@app.route("/edit_item/<int:item_id>")
+def edit_item(item_id):
+    item = arvostelut.get_item(item_id)
+    return render_template("edit_item.html", item=item)
+
 @app.route("/create", methods=["POST"])
 def create():
     username = request.form["username"]
@@ -53,6 +58,16 @@ def create():
         return "VIRHE: tunnus on jo varattu"
 
     return "Tunnus luotu"
+
+@app.route("/update_item", methods=["POST"])
+def update_item():
+    item_id = request.form["item_id"]
+    title = request.form["title"]
+    review = request.form["review"]
+
+    arvostelut.update_item(item_id, title, review)
+
+    return redirect("/item/" + item_id)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
