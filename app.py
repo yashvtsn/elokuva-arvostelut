@@ -46,7 +46,11 @@ def create_item():
     require_login()
 
     title = request.form["title"]
+    if not title or len(title) > 50:
+        abort(403)
     review = request.form["review"]
+    if not review or len(review) > 1500:
+        abort(403)
     user_id = session["user_id"]
 
     reviews.add_item(title, review, user_id)
@@ -66,6 +70,7 @@ def edit_item(item_id):
         abort(404)
     if item["user_id"] != session["user_id"]:
         abort(403)
+    
     return render_template("edit_item.html", item=item)
 
 @app.route("/remove_item/<int:item_id>", methods=["GET", "POST"])
@@ -113,7 +118,11 @@ def update_item():
     if item["user_id"] != session["user_id"]:
         abort(403)
     title = request.form["title"]
+    if not title or len(title) > 50:
+        abort(403)
     review = request.form["review"]
+    if not review or len(review) > 1500:
+        abort(403)
 
     reviews.update_item(item_id, title, review)
 

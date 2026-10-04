@@ -11,12 +11,12 @@
   <form action="/update_item" method="post">
     <p>
       Elokuvan otsikko: <br />
-      <input type="text" name="title" value="{{ item.title }}" />
+      <input type="text" name="title" value="{{ item.title }}" maxlength = "50" required/>
     </p>
 
     <p>
       Arvostelun teksti: <br />
-      <textarea name="review" rows="8" cols="46">{{ item.review }}</textarea>
+      <textarea name="review" rows="8" cols="46" maxlength = "1500" required>{{ item.review }}</textarea>
     </p>
 
     <input type="hidden" name="item_id" value="{{ item.id }}" />
