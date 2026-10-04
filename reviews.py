@@ -19,7 +19,8 @@ def get_item(item_id):
              WHERE reviews.user_id = users.id
                AND reviews.id = ?"""
 
-    return db.query(sql, [item_id])[0]
+    result = db.query(sql, [item_id])
+    return result[0] if result else None
 
 def update_item(item_id, title, review):
     sql = """UPDATE reviews
