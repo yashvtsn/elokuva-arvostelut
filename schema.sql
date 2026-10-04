@@ -10,6 +10,11 @@ CREATE TABLE reviews (
     review TEXT,
     user_id INTEGER REFERENCES users
 );
+CREATE TABLE classes (
+    id INTEGER PRIMARY KEY,
+    title TEXT,
+    value TEXT
+);
 
 CREATE TABLE reviews_classes (
     id INTEGER PRIMARY KEY,
