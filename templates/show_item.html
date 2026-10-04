@@ -20,7 +20,16 @@
     <a href="{{ url_for('remove_item', item_id=item.id) }}">Poista</a>
 </p>
 {% endif %}
-
+{% if classes %}
+<p>
+  Luokat:
+  <ul>
+    {% for class in classes %}
+    <li>{{ class.title }}: {{ class.value }}</li>
+    {% endfor %}
+  </ul>
+</p>
+{% endif %}
   <p>
     <a href="/">Takaisin</a>
   </p>

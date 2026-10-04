@@ -10,12 +10,34 @@
   <form action="/create_item" method="post">
     <p>
       Elokuvan otsikko: <br />
-      <input type="text" name="title" maxlength = "50"/>
+      <input type="text" name="title" maxlength = "50" required/>
     </p>
     <p>
       Arvostelun teksti: <br />
-      <textarea name = "review" rows = "8" cols = "46" maxlength = "1500"></textarea>
+      <textarea name = "review" rows = "8" cols = "46" maxlength = "1500" required></textarea>
       </p>
+      <p>
+        Elokuvan genre: <br />
+        <select name = "section">
+          <option value = "">(valitse)</option>
+          <option value = "draama">draama</option>
+          <option value = "komedia">komedia</option>
+          <option value = "trilleri">trilleri</option>
+          <option value = "rikoselokuva">rikoselokuva</option>
+          <option value = "fantasiaelokuva">fantasiaelokuva</option>
+          <option value = "animaatioelokuva">animaatioelokuva</option>
+          <option value = "dokumenttielokuva">dokumenttielokuva</option>
+        </select>
+      </p>
+      <p>
+        Sisältääkö arvostelu spoileria?: <br />
+        <select name = "spoilers">
+          <option value = "">(valitse)</option>
+          <option value = "sisältää">Sisältää</option>
+          <option value = "ei sisällä">Ei sisällä</option>
+          </select>
+      </p>
+
     <input type="submit" value="Luo arvostelu" />
   </form>
 </body>

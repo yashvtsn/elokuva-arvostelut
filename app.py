@@ -42,7 +42,8 @@ def show_item(item_id):
     item = reviews.get_item(item_id)
     if not item: 
         abort(404)
-    return render_template("show_item.html", item=item)
+    classes = reviews.get_classes(item_id)
+    return render_template("show_item.html", item=item, classes = classes)
 
 @app.route("/new_item")
 def new_item():
@@ -62,7 +63,15 @@ def create_item():
         abort(403)
     user_id = session["user_id"]
 
-    reviews.add_item(title, review, user_id)
+    classes = []
+    section = request.form["section"]
+    if section: 
+        classes.append(("Elokuvan genre", section))
+    spoilers = request.form["spoilers"]
+    if spoilers:
+        classes.append(("Sisältääkö arvostelu spoileria", spoilers))
+
+    reviews.add_item(title, review, user_id, classes)
 
     return redirect("/")
 
