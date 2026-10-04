@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Käyttäjä {{ user.username }}</title>
+</head>
+
+<body>
+  <h1>Käyttäjä {{ user.username }}</h1>
+  <p>
+    Käyttäjällä on yhteensä {{ reviews | length }} arvostelua.
+  </p>
+  <h2>Arvostelut</h2>
+  <ul>
+    {% for review in reviews %}
+    <li><a href="/item/{{review.id}}">{{ review.title }}</a></li>
+    {% endfor %}
+  </ul>
+  <p>
+    <a href="/">Takaisin</a>
+  </p>
+</body>
+
+</html>
