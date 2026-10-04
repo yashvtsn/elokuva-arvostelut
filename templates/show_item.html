@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{ item.title }}</title>
+</head>
+
+<body>
+  <h1>{{ item.title }}</h1>
+
+  <p>{{ item.review }}</p>
+
+  <p>Kirjoittaja: {{ item.username }}</p>
+
+  {% if session.get("user_id") == item.user_id %}
+<p>
+    <a href="{{ url_for('edit_item', item_id=item.id) }}">Muokkaa</a>
+    <a href="{{ url_for('remove_item', item_id=item.id) }}">Poista</a>
+</p>
+{% endif %}
+
+  <p>
+    <a href="/">Takaisin</a>
+  </p>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Elokuva-arvostelut</title>
+</head>
+
+<body>
+
+  <h1>Elokuva-arvostelut</h1>
+
+  {% if session.username %}
+  <p>
+    Olet kirjautunut nimellä {{ session.username }}
+  </p>
+  {% endif %}
+  <p>
+    <a href="/login">Kirjaudu sisään</a>
+    <a href="/register">Luo tunnus</a>
+    <a href="/logout">Kirjaudu ulos</a>
+  </p>
+
+  <p>
+    <a href="/new_item">Uusi arvostelu</a>
+  </p>
+
+  <h2>Arvostelut</h2>
+  <ul>
+    {% for item in items %}
+    <li><a href ="/item/{{ item.id }}">{{ item.title }}</a></li>
+    {% endfor %}
+  </ul>
+</body>
+
+</html>
