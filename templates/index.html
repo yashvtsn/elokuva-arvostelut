@@ -13,15 +13,19 @@
   <p>
     Olet kirjautunut nimellä {{ session.username }}
   </p>
-  {% endif %}
   <p>
-    <a href="/login">Kirjaudu sisään</a>
-    <a href="/register">Luo tunnus</a>
     <a href="/logout">Kirjaudu ulos</a>
   </p>
 
   <p>
     <a href="/new_item">Uusi arvostelu</a>
+  </p>
+  {% else %}
+  <p>
+    <a href="/login">Kirjaudu sisään</a>
+    <a href="/register">Luo tunnus</a>
+  </p>
+  {% endif %}
     <a href="/find_item">Etsi arvostelu</a>
   </p>
 

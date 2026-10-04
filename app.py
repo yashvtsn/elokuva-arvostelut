@@ -9,6 +9,10 @@ import reviews
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+def require_login():
+    if "user_id" not in session:
+        abort(403)
+
 @app.route("/")
 def index():
     all_items = reviews.get_items()
@@ -33,10 +37,14 @@ def show_item(item_id):
 
 @app.route("/new_item")
 def new_item():
+    require_login()
+
     return render_template("new_item.html")
 
 @app.route("/create_item", methods=["POST"])
 def create_item():
+    require_login()
+
     title = request.form["title"]
     review = request.form["review"]
     user_id = session["user_id"]
@@ -51,6 +59,8 @@ def register():
 
 @app.route("/edit_item/<int:item_id>")
 def edit_item(item_id):
+    require_login()
+
     item = reviews.get_item(item_id)
     if not item: 
         abort(404)
@@ -60,6 +70,8 @@ def edit_item(item_id):
 
 @app.route("/remove_item/<int:item_id>", methods=["GET", "POST"])
 def remove_item(item_id):
+    require_login()
+
     item = reviews.get_item(item_id)
     if not item: 
         abort(404)
@@ -128,6 +140,7 @@ def login():
 
 @app.route("/logout")
 def logout():
-    del session["username"]
-    del session["user_id"]
+    if "user_id" in session: 
+        del session["username"]
+        del session["user_id"]
     return redirect("/")
