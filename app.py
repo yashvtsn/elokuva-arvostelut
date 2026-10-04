@@ -1,6 +1,6 @@
 from flask import Flask
 import sqlite3
-from flask import redirect, render_template, request, session
+from flask import abort, redirect, render_template, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import db
@@ -50,10 +50,15 @@ def register():
 @app.route("/edit_item/<int:item_id>")
 def edit_item(item_id):
     item = reviews.get_item(item_id)
+    if item["user_id"] != session["user_id"]:
+        abort(403)
     return render_template("edit_item.html", item=item)
 
 @app.route("/remove_item/<int:item_id>", methods=["GET", "POST"])
 def remove_item(item_id):
+    item = reviews.get_item(item_id)
+    if item["user_id"] != session["user_id"]:
+        abort(403)
     if request.method == "GET":
         item = reviews.get_item(item_id)
         return render_template("remove_item.html", item=item)
