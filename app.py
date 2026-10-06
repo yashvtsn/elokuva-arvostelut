@@ -62,12 +62,26 @@ def create_item():
         abort(403)
     user_id = session["user_id"]
 
+    all_classes = reviews.get_all_classes()
+
     classes = []
     for entry in request.form.getlist("classes"):
+        print("entry:", repr(entry))
+        print("all_classes:", all_classes)
+
         if entry:
-            parts = entry.split(":")
-            classes.append((parts[0], parts[1]))
-    
+            class_title, class_value = entry.split(":", 1)
+            class_title = class_title.strip()
+            class_value = class_value.strip()
+
+            if class_title not in all_classes:
+                abort(403)
+
+            if class_value not in all_classes[class_title]:
+                abort(403)
+
+            classes.append((class_title, class_value))
+
     reviews.add_item(title, review, user_id, classes)
 
     return redirect("/")
@@ -145,10 +159,15 @@ def update_item():
         abort(403)
 
     classes = []
+    all_classes = reviews.get_all_classes()
     for entry in request.form.getlist("classes"):
         if entry:
-            parts = entry.split(":")
-            classes.append((parts[0], parts[1]))
+            class_title, class_value = entry.split(":")
+            if class_title not in all_classes: 
+                abort(403)
+            if class_value not in all_classes[class_title]:
+                abort(403)
+            classes.append((class_title, class_value))
 
     reviews.update_item(item_id, title, review, classes)
 
