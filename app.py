@@ -1,7 +1,6 @@
 from flask import Flask
 import sqlite3
 from flask import abort, redirect, render_template, request, session
-from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import db
 import reviews
@@ -86,8 +85,15 @@ def edit_item(item_id):
         abort(404)
     if item["user_id"] != session["user_id"]:
         abort(403)
-    
-    return render_template("edit_item.html", item=item)
+
+    all_classes = reviews.get_all_classes()
+    classes = {}
+    for my_class in all_classes:
+        classes[my_class] = ""
+    for entry in reviews.get_classes(item_id):
+        classes[entry["title"]] = entry["value"]
+
+    return render_template("edit_item.html", item=item, classes=classes, all_classes = all_classes)
 
 @app.route("/remove_item/<int:item_id>", methods=["GET", "POST"])
 def remove_item(item_id):
@@ -138,7 +144,13 @@ def update_item():
     if not review or len(review) > 1500:
         abort(403)
 
-    reviews.update_item(item_id, title, review)
+    classes = []
+    for entry in request.form.getlist("classes"):
+        if entry:
+            parts = entry.split(":")
+            classes.append((parts[0], parts[1]))
+
+    reviews.update_item(item_id, title, review, classes)
 
     return redirect("/item/" + item_id)
 
