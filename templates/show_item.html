@@ -1,38 +1,82 @@
 <!DOCTYPE html>
-<html>
+<html lang="fi">
 
 <head>
-  <title>{{ item.title }}</title>
+    <meta charset="UTF-8">
+    <title>{{ item.title }}</title>
 </head>
 
 <body>
-  <h1>{{ item.title }}</h1>
 
-  <p>{{ item.review }}</p>
+    <h1>{{ item.title }}</h1>
+    <p>{{ item.review }}</p>
+    <p>
+        Kirjoittaja:
+        <a href="/user/{{ item.user_id }}">{{ item.username }}</a>
+    </p>
 
-  <p>
-    Kirjoittaja: <a href = "/user/{{ item.user_id }}">{{ item.username }}</a>
-  </p>
+    {% if session.get("user_id") == item.user_id %}
+        <p>
+            <a href="{{ url_for('edit_item', item_id=item.id) }}">Muokkaa</a>
+            |
+            <a href="{{ url_for('remove_item', item_id=item.id) }}">Poista</a>
+        </p>
+    {% endif %}
 
-  {% if session.get("user_id") == item.user_id %}
-<p>
-    <a href="{{ url_for('edit_item', item_id=item.id) }}">Muokkaa</a>
-    <a href="{{ url_for('remove_item', item_id=item.id) }}">Poista</a>
-</p>
-{% endif %}
-{% if classes %}
-<p>
-  Luokat:
-  <ul>
-    {% for class in classes %}
-    <li>{{ class.title }}: {{ class.value }}</li>
-    {% endfor %}
-  </ul>
-</p>
-{% endif %}
-  <p>
-    <a href="/">Takaisin</a>
-  </p>
+    {% if classes %}
+        <h2>Luokat</h2>
+        <ul>
+            {% for class in classes %}
+                <li>{{ class.title }}: {{ class.value }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h2>Kommentit</h2>
+
+    {% if comments %}
+        <ul>
+            {% for comment in comments %}
+                <li>
+                    {{ comment.review_text }}
+                    —
+                    <a href="/user/{{ comment.user_id }}">
+                        {{ comment.username }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Ei vielä kommentteja.</p>
+    {% endif %}
+
+    <h2>Uusi kommentti</h2>
+
+    <form action="{{ url_for('create_comment') }}" method="post">
+        <label for="comment">Kommentti:</label>
+        <br>
+
+        <textarea
+            id="comment"
+            name="comment"
+            rows="8"
+            cols="46"
+            maxlength="1500"
+            required></textarea>
+
+        <input
+            type="hidden"
+            name="review_id"
+            value="{{ item.id }}">
+
+        <br>
+        <input type="submit" value="Lähetä kommentti">
+    </form>
+
+    <p>
+        <a href="/">Takaisin</a>
+    </p>
+
 </body>
-
 </html>
+

@@ -18,9 +18,28 @@ def add_item(title, review, user_id, classes):
 
     review_id = db.last_insert_id()
 
+
     sql = "INSERT INTO reviews_classes (review_id, title, value) VALUES (?, ?, ?)"
     for title, value in classes:
         db.execute(sql, [review_id, title, value])
+
+def add_comment(review_id, user_id, comment):
+    sql = """INSERT INTO comments (review_id, user_id, review_text)
+             VALUES (?, ?, ?)"""
+    db.execute(sql, [review_id, user_id, comment])
+
+
+
+def get_comments(review_id):
+    sql = """
+        SELECT comments.review_text, comments.user_id, users.username
+        FROM comments
+        JOIN users ON comments.user_id = users.id
+        WHERE comments.review_id = ?
+        ORDER BY comments.id
+    """
+    result = db.query(sql, [review_id])
+    return result
 
 def get_classes(review_id):
     sql = "SELECT title, value FROM reviews_classes WHERE review_id = ?"

@@ -36,13 +36,16 @@ def find_item():
         results = []
     return render_template("find_item.html", query=query, results = results)
 
-@app.route("/item/<int:item_id>")
-def show_item(item_id):
-    item = reviews.get_item(item_id)
-    if not item: 
+
+@app.route("/item/<int:review_id>")
+def show_item(review_id):
+    item = reviews.get_item(review_id)
+    if not item:
         abort(404)
-    classes = reviews.get_classes(item_id)
-    return render_template("show_item.html", item=item, classes = classes)
+
+    classes = reviews.get_classes(review_id)
+    comments = reviews.get_comments(review_id)
+    return render_template("show_item.html", item=item, classes=classes, comments=comments)
 
 @app.route("/new_item")
 def new_item():
@@ -85,6 +88,24 @@ def create_item():
     reviews.add_item(title, review, user_id, classes)
 
     return redirect("/")
+
+
+@app.route("/create_comment", methods=["POST"])
+def create_comment():
+    require_login()
+    comment = request.form["comment"].strip()
+    if not comment or len(comment) > 1500:
+        abort(403)
+
+    review_id = request.form["review_id"]
+    review = reviews.get_item(review_id)
+    if not review:
+        abort(403)
+    user_id = session["user_id"]
+    reviews.add_comment(review_id, user_id, comment)
+
+    return redirect("/item/" + str(review_id))
+
 
 @app.route("/register")
 def register():
