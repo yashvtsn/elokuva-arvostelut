@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Arvostelun kuvat</title>
+</head>
+
+<body>
+  <h1>Arvostelun kuvat</h1>
+
+  <p>Arvostelussa on {{ images | count }} kuvaa</p>
+
+  <p>
+  <a href="/item/{{ review.id }}">Takaisin arvosteluun</a>
+  </p>    
+
+  <p>
+    Lisää kuvia arvosteluun:
+  </p>
+
+  <form action="/add_image" method="post" enctype="multipart/form-data">
+    <p>
+      Valitse kuva: <br />
+      <input type="file" name="image" accept=".jpg" required />
+    </p>
+
+    <input type="hidden" name="review_id" value="{{ review.id }}" />
+
+    <input type="submit" value="Lisää kuva" />
+  </form>
+
+</body>
+
+</html>
+
+

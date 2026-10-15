@@ -29,6 +29,23 @@ def add_comment(review_id, user_id, comment):
     db.execute(sql, [review_id, user_id, comment])
 
 
+def get_images(review_id):
+    sql = "SELECT id FROM images WHERE review_id = ?"
+    return db.query(sql, [review_id])
+
+
+def add_image(review_id, image):
+    sql = """
+        INSERT INTO images (review_id, image)
+        VALUES (?, ?)
+    """
+    db.execute(sql, [review_id, image])
+
+def get_image(image_id):
+    sql = "SELECT image FROM images WHERE id = ?"
+    result = db.query(sql, [image_id])
+    return result[0][0] if result else None
+
 
 def get_comments(review_id):
     sql = """
@@ -40,6 +57,7 @@ def get_comments(review_id):
     """
     result = db.query(sql, [review_id])
     return result
+
 
 def get_classes(review_id):
     sql = "SELECT title, value FROM reviews_classes WHERE review_id = ?"

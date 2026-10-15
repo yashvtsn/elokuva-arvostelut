@@ -17,12 +17,14 @@
 
     {% if session.get("user_id") == item.user_id %}
         <p>
-            <a href="{{ url_for('edit_item', item_id=item.id) }}">Muokkaa</a>
-            |
-            <a href="{{ url_for('remove_item', item_id=item.id) }}">Poista</a>
+            <a href="/edit_item/ {{item.id}}">Muokkaa</a>
+            <a href="/remove_item/{{item.id}}">Poista</a>
+            <a href="/images/{{ item.id }}">Arvostelun kuvat</a>
         </p>
     {% endif %}
-
+    {% for image in images %}
+    <img src="/image/{{ image.id }}" />
+    {% endfor %}
     {% if classes %}
         <h2>Luokat</h2>
         <ul>

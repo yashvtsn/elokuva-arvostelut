@@ -5,6 +5,7 @@ import config
 import db
 import reviews
 import users
+from flask import make_response
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -37,6 +38,7 @@ def find_item():
     return render_template("find_item.html", query=query, results = results)
 
 
+
 @app.route("/item/<int:review_id>")
 def show_item(review_id):
     item = reviews.get_item(review_id)
@@ -45,7 +47,26 @@ def show_item(review_id):
 
     classes = reviews.get_classes(review_id)
     comments = reviews.get_comments(review_id)
-    return render_template("show_item.html", item=item, classes=classes, comments=comments)
+    images = reviews.get_images(review_id)
+
+    return render_template(
+        "show_item.html",
+        item=item,
+        classes=classes,
+        comments=comments,
+        images=images
+    )
+
+@app.route("/image/<int:image_id>")
+def show_image(image_id):
+    image = reviews.get_image(image_id)
+    if not image:
+        abort(404)
+
+    response = make_response(bytes(image))
+    response.headers.set("Content-Type", "image/jpeg")
+    return response
+
 
 @app.route("/new_item")
 def new_item():
@@ -129,6 +150,46 @@ def edit_item(item_id):
         classes[entry["title"]] = entry["value"]
 
     return render_template("edit_item.html", item=item, classes=classes, all_classes = all_classes)
+
+
+@app.route("/images/<int:review_id>")
+def edit_images(review_id):
+    require_login()
+
+    review = reviews.get_item(review_id)
+    if not review:
+        abort(404)
+
+    if review["user_id"] != session["user_id"]:
+        abort(403)
+
+    images = reviews.get_images(review_id)
+
+    return render_template(
+        "images.html", review=review, images=images)
+
+
+@app.route("/add_image", methods=["POST"])
+def add_image():
+    require_login()
+
+    review_id = request.form["review_id"]
+    review = reviews.get_item(review_id)
+    if not review: 
+        abort(404)
+    if review["user_id"] != session["user_id"]:
+        abort(403)
+
+    file = request.files["image"]
+    if not file.filename.endswith(".jpg"):
+        return "VIRHE: väärä tiedostomuoto"
+
+    image = file.read()
+    if len(image) > 100 * 1024:
+        return "VIRHE: liian suuri kuva"
+
+    reviews.add_image(review_id, image)
+    return redirect("/images/" + str(review_id))
 
 @app.route("/remove_item/<int:item_id>", methods=["GET", "POST"])
 def remove_item(item_id):
