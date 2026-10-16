@@ -9,25 +9,24 @@
 
   <h1>Elokuva-arvostelut</h1>
 
+
   {% if session.username %}
   <p>
     Olet kirjautunut nimellä {{ session.username }}
   </p>
-  <p>
-    <a href="/logout">Kirjaudu ulos</a>
-  </p>
+  {% endif %}
 
   <p>
-    <a href="/new_item">Uusi arvostelu</a>
-  </p>
+    <a href="/find_item">Etsi arvostelu</a> |
+  {% if session.user_id %}
+    <a href="/logout">Kirjaudu ulos</a> |
+    <a href="/new_item">Uusi arvostelu</a> |
   {% else %}
-  <p>
-    <a href="/login">Kirjaudu sisään</a>
-    <a href="/register">Luo tunnus</a>
-  </p>
+    <a href="/login">Kirjaudu sisään</a> |
+    <a href="/register">Luo tunnus</a> |
   {% endif %}
-    <a href="/find_item">Etsi arvostelu</a>
   </p>
+  
 
   <h2>Arvostelut</h2>
   <ul>
