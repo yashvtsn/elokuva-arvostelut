@@ -9,7 +9,7 @@
     <img src="/image/{{ image.id }}" alt="Arvostelun kuva" width="300">
 {% endfor %}
 
-<p>{{ item.review }}</p>
+<p>{{ item.review | show_lines }}</p>
 
 <p>
     <b>Kirjoittaja:</b>
