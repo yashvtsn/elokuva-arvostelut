@@ -30,3 +30,9 @@ CREATE TABLE reviews_classes (
     title TEXT,
     value TEXT
 );
+
+CREATE TABLE images (
+    id INTEGER PRIMARY KEY,
+    review_id INTEGER REFERENCES reviews,
+    image BLOB
+);
