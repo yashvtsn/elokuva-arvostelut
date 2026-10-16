@@ -106,9 +106,19 @@ def update_item(review_id, title, review, classes):
     for title, value in classes:
         db.execute(sql, [review_id, title, value])
 
-def remove_item(item_id):
+
+def remove_item(review_id):
+    sql = "DELETE FROM comments WHERE review_id = ?"
+    db.execute(sql, [review_id])
+
+    sql = "DELETE FROM reviews_classes WHERE review_id = ?"
+    db.execute(sql, [review_id])
+
+    sql = "DELETE FROM images WHERE review_id = ?"
+    db.execute(sql, [review_id])
+
     sql = "DELETE FROM reviews WHERE id = ?"
-    db.execute(sql, [item_id])
+    db.execute(sql, [review_id])
 
 def find_items(query): 
     sql = """SELECT id, title 
