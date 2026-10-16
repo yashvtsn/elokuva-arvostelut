@@ -1,42 +1,37 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Arvostelun muokkaus</title>
-</head>
+{% block title %}Arvostelun muokkaus{% endblock %}
 
-<body>
-  <h1>Arvostelun muokkaus</h1>
+{% block content %}
+<h2>Arvostelun muokkaus</h2>
 
-  <form action="/update_item" method="post">
-    <p>
-      Elokuvan otsikko: <br />
-      <input type="text" name="title" value="{{ item.title }}" maxlength = "50" required/>
-    </p>
+<form action="/update_item" method="post">
+  <p>
+    Elokuvan otsikko: <br />
+    <input type="text" name="title" value="{{ item.title }}" maxlength = "50" required/>
+  </p>
 
-    <p>
-      Arvostelun teksti: <br />
-      <textarea name="review" rows="8" cols="46" maxlength = "1500" required>{{ item.review }}</textarea>
-    </p>
+  <p>
+    Arvostelun teksti: <br />
+    <textarea name="review" rows="8" cols="46" maxlength = "1500" required>{{ item.review }}</textarea>
+  </p>
 
-    <input type="hidden" name="item_id" value="{{ item.id }}" />
-    {% for class in all_classes %}
-    <p>
-      {{ class }}: <br />
-      <select name="classes">
-        <option value=""></option>
-      {% for option in all_classes[class] %}
-        {% if classes[class] == option %}
-        <option value="{{ class }}: {{ option }}"selected>{{ option }}</option>
-        {% else %}
-        <option value="{{ class }}: {{ option }}">{{ option }}</option>
-        {% endif %}
-      {% endfor %}
-      </select>
-    </p>
+  <input type="hidden" name="item_id" value="{{ item.id }}" />
+  {% for class in all_classes %}
+  <p>
+    {{ class }}: <br />
+    <select name="classes">
+      <option value=""></option>
+    {% for option in all_classes[class] %}
+      {% if classes[class] == option %}
+      <option value="{{ class }}: {{ option }}"selected>{{ option }}</option>
+      {% else %}
+      <option value="{{ class }}: {{ option }}">{{ option }}</option>
+      {% endif %}
     {% endfor %}
-    <input type="submit" value="Päivitä arvostelua" />
-  </form>
-</body>
-
-</html>
+    </select>
+  </p>
+  {% endfor %}
+  <input type="submit" value="Päivitä arvostelua" />
+</form>
+{% endblock %}

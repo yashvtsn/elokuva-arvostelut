@@ -1,84 +1,77 @@
-<!DOCTYPE html>
-<html lang="fi">
+{% extends "layout.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>{{ item.title }}</title>
-</head>
+{% block title %}{{ item.title }}{% endblock %}
 
-<body>
+{% block content %}
 
-    <h1>{{ item.title }}</h1>
-    <p>{{ item.review }}</p>
+<h1>{{ item.title }}</h1>
+<p>{{ item.review }}</p>
+
+<p>
+    Kirjoittaja:
+    <a href="/user/{{ item.user_id }}">{{ item.username }}</a>
+</p>
+
+{% if session.get("user_id") == item.user_id %}
     <p>
-        Kirjoittaja:
-        <a href="/user/{{ item.user_id }}">{{ item.username }}</a>
+        <a href="/edit_item/{{ item.id }}">Muokkaa</a>
+        <a href="/remove_item/{{ item.id }}">Poista</a>
+        <a href="/images/{{ item.id }}">Arvostelun kuvat</a>
     </p>
+{% endif %}
 
-    {% if session.get("user_id") == item.user_id %}
-        <p>
-            <a href="/edit_item/ {{item.id}}">Muokkaa</a>
-            <a href="/remove_item/{{item.id}}">Poista</a>
-            <a href="/images/{{ item.id }}">Arvostelun kuvat</a>
-        </p>
-    {% endif %}
-    {% for image in images %}
-    <img src="/image/{{ image.id }}" />
-    {% endfor %}
-    {% if classes %}
-        <h2>Luokat</h2>
-        <ul>
-            {% for class in classes %}
-                <li>{{ class.title }}: {{ class.value }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+{% for image in images %}
+    <img src="/image/{{ image.id }}" alt="Arvostelun kuva" width="300">
+{% endfor %}
 
-    <h2>Kommentit</h2>
+{% if classes %}
+    <h2>Luokat</h2>
+    <ul>
+        {% for class in classes %}
+            <li>{{ class.title }}: {{ class.value }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 
-    {% if comments %}
-        <ul>
-            {% for comment in comments %}
-                <li>
-                    {{ comment.review_text }}
-                    —
-                    <a href="/user/{{ comment.user_id }}">
-                        {{ comment.username }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Ei vielä kommentteja.</p>
-    {% endif %}
+<h3>Kommentit</h3>
 
-    <h2>Uusi kommentti</h2>
+{% if comments %}
+    <ul>
+        {% for comment in comments %}
+            <li>
+                {{ comment.review_text }}
+                —
+                <a href="/user/{{ comment.user_id }}">
+                    {{ comment.username }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Ei vielä kommentteja.</p>
+{% endif %}
 
-    <form action="{{ url_for('create_comment') }}" method="post">
-        <label for="comment">Kommentti:</label>
-        <br>
+<h3>Uusi kommentti</h3>
 
-        <textarea
-            id="comment"
-            name="comment"
-            rows="8"
-            cols="46"
-            maxlength="1500"
-            required></textarea>
+<form action="{{ url_for('create_comment') }}" method="post">
+    <label for="comment">Kommentti:</label>
+    <br>
 
-        <input
-            type="hidden"
-            name="review_id"
-            value="{{ item.id }}">
+    <textarea
+        id="comment"
+        name="comment"
+        rows="8"
+        cols="46"
+        maxlength="1500"
+        required></textarea>
 
-        <br>
-        <input type="submit" value="Lähetä kommentti">
-    </form>
+    <input
+        type="hidden"
+        name="review_id"
+        value="{{ item.id }}">
 
-    <p>
-        <a href="/">Takaisin</a>
-    </p>
+    <br>
+    <input type="submit" value="Lähetä kommentti">
+</form>
 
-</body>
-</html>
-
+{% endblock %}

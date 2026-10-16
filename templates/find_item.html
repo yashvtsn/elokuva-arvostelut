@@ -1,31 +1,23 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Etsi ilmoitus</title>
-</head>
+{% block title %}Etsi ilmoitus{% endblock %}
 
-<body>
+{% block content %}
 
-  <h1>Etsi ilmoitus</h1>
-  <form action="/find_item" method="get">
-   <p>
-     Hakusana: <input type="text" name ="query", value ="{{ query }}">
-   </p>
-   <input type ="submit" value="Lähetä">  
-   </form>
-   <p>
-    <a href ="/">Takaisin</a>
-   </p>
+<h1>Etsi ilmoitus</h1>
+<form action="/find_item" method="get">
+  <p>
+    Hakusana: <input type="text" name ="query", value ="{{ query }}">
+  </p>
+  <input type ="submit" value="Lähetä">  
+  </form>
 
-   {% if query %}
-   <h2>Tulokset</h2>
-   <ul>
-    {% for result in results %}
-        <li><a href="/item/{{ result.id }}">{{ result.title }}</a></li>
-    {% endfor %}
-   </ul>
-   {% endif %}
-</body>
-
-</html>
+  {% if query %}
+  <h2>Tulokset</h2>
+  <ul>
+  {% for result in results %}
+      <li><a href="/item/{{ result.id }}">{{ result.title }}</a></li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+{% endblock %}

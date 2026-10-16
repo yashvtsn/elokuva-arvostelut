@@ -3,32 +3,31 @@
 
 <head>
   <title>{% block title %}{% endblock %}</title>
-  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
-  <div class="header">
-    <h1>Keskustelu</h1>
-  </div>
 
-  <div class="nav">
-    <nav>
-      <ul>
-        <li><a href="/">Etusivu</a></li>
-        <li><a href="/search">Uusi arvostelu</a></li>
-        <li><a href="/register">Luo tunnus</a></li>
-        {% if session.user_id %}
-        <li><a href="/logout">Kirjaudu ulos</a></li>
-        {% else %}
-        <li><a href="/login">Kirjaudu sisään</a></li>
-        {% endif %}
-      </ul>
-    </nav>
-  </div>
+  <h1>Elokuva-arvostelut</h1>
 
-  <div class="content">
+
+  {% if session.username %}
+  <p>
+    Olet kirjautunut nimellä {{ session.username }}
+  </p>
+  {% endif %}
+
+  <p>
+    <a href="/find_item">Etsi arvostelu</a> |
+    <a href="/">Etusivu</a> |
+  {% if session.user_id %}
+    <a href="/logout">Kirjaudu ulos</a> |
+    <a href="/new_item">Uusi arvostelu</a> |
+  {% else %}
+    <a href="/login">Kirjaudu sisään</a> |
+    <a href="/register">Luo tunnus</a> |
+  {% endif %}
+  </p>
     {% block content %}{% endblock %}
-  </div>
 </body>
 
 </html>

@@ -1,39 +1,14 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Elokuva-arvostelut</title>
-</head>
+{% block title %}Elokuva-arvostelut{% endblock %}
 
-<body>
+{% block content %}
 
-  <h1>Elokuva-arvostelut</h1>
+<h2>Arvostelut testi</h2>
+<ul>
+  {% for item in items %}
+  <li><a href ="/item/{{ item.id }}">{{ item.title }}</a></li>
+  {% endfor %}
+</ul>
 
-
-  {% if session.username %}
-  <p>
-    Olet kirjautunut nimellä {{ session.username }}
-  </p>
-  {% endif %}
-
-  <p>
-    <a href="/find_item">Etsi arvostelu</a> |
-  {% if session.user_id %}
-    <a href="/logout">Kirjaudu ulos</a> |
-    <a href="/new_item">Uusi arvostelu</a> |
-  {% else %}
-    <a href="/login">Kirjaudu sisään</a> |
-    <a href="/register">Luo tunnus</a> |
-  {% endif %}
-  </p>
-  
-
-  <h2>Arvostelut</h2>
-  <ul>
-    {% for item in items %}
-    <li><a href ="/item/{{ item.id }}">{{ item.title }}</a></li>
-    {% endfor %}
-  </ul>
-</body>
-
-</html>
+  {% endblock %}
