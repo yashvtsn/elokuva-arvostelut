@@ -1,11 +1,10 @@
 from flask import Flask
 import sqlite3
-from flask import abort, redirect, render_template, request, session
+from flask import abort, redirect, render_template, request, session, make_response
 import config
-import db
 import reviews
 import users
-from flask import make_response
+import db
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -107,8 +106,9 @@ def create_item():
             classes.append((class_title, class_value))
 
     reviews.add_item(title, review, user_id, classes)
+    review_id = db.last_insert_id()
 
-    return redirect("/")
+    return redirect("/item/" + str(review_id))
 
 
 @app.route("/create_comment", methods=["POST"])
@@ -227,20 +227,6 @@ def remove_item(item_id):
         else: 
             return redirect("/item/" + str(item_id))
 
-@app.route("/create", methods=["POST"])
-def create():
-    username = request.form["username"]
-    password1 = request.form["password1"]
-    password2 = request.form["password2"]
-    if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
-
-    try:
-        users.create_user(username, password1)
-    except sqlite3.IntegrityError:
-        return "VIRHE: tunnus on jo varattu"
-
-    return "Tunnus luotu"
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
@@ -271,6 +257,21 @@ def update_item():
     reviews.update_item(item_id, title, review, classes)
 
     return redirect("/item/" + item_id)
+
+@app.route("/create", methods=["POST"])
+def create():
+    username = request.form["username"]
+    password1 = request.form["password1"]
+    password2 = request.form["password2"]
+    if password1 != password2:
+        return "VIRHE: salasanat eivät ole samat"
+
+    try:
+        users.create_user(username, password1)
+    except sqlite3.IntegrityError:
+        return "VIRHE: tunnus on jo varattu"
+
+    return "Tunnus luotu"
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
