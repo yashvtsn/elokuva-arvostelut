@@ -5,12 +5,19 @@ import config
 import reviews
 import users
 import db
+import secrets
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
 def require_login():
     if "user_id" not in session:
+        abort(403)
+
+def check_csrf():
+    if "csfr_token" not in request.form:
+        abort(403)
+    if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
 
 @app.route("/")
@@ -35,8 +42,6 @@ def find_item():
         query = ""
         results = []
     return render_template("find_item.html", query=query, results = results)
-
-
 
 @app.route("/item/<int:review_id>")
 def show_item(review_id):
@@ -76,6 +81,7 @@ def new_item():
 @app.route("/create_item", methods=["POST"])
 def create_item():
     require_login()
+    check_csrf()
 
     title = request.form["title"]
     if not title:
@@ -121,8 +127,8 @@ def create_item():
 
 @app.route("/create_comment", methods=["POST"])
 def create_comment():
-
     require_login()
+    check_csrf()
 
     comment = request.form.get("comment", "").strip()
     review_id = request.form.get("review_id", "")
@@ -183,6 +189,7 @@ def edit_images(review_id):
 @app.route("/add_image", methods=["POST"])
 def add_image():
     require_login()
+    check_csrf()
 
     review_id = request.form["review_id"]
     review = reviews.get_item(review_id)
@@ -208,6 +215,7 @@ def add_image():
 @app.route("/remove_image", methods=["POST"])
 def remove_image():
     require_login()
+    check_csrf()
 
     review_id = request.form["review_id"]
     review = reviews.get_item(review_id)
@@ -234,6 +242,7 @@ def remove_item(item_id):
         item = reviews.get_item(item_id)
         return render_template("remove_item.html", item=item)
     if request.method == "POST":
+        check_csrf()
         if "remove" in request.form:
             reviews.remove_item(item_id)
             return redirect("/")
@@ -243,7 +252,6 @@ def remove_item(item_id):
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
-    print("UPDATE ROUTE REACHED")
 
     item_id = request.form["item_id"]
     item = reviews.get_item(item_id)
@@ -251,26 +259,20 @@ def update_item():
     if not item:
         abort(404)
 
-    print("ITEM USER ID:", item["user_id"])
-    print("SESSION USER ID:", session.get("user_id"))
-
     if item["user_id"] != session.get("user_id"):
         print("FAILED: ownership check")
         abort(403)
 
     title = request.form["title"]
     if not title or len(title) > 50:
-        print("FAILED: title validation", repr(title), len(title))
         abort(403)
 
     review = request.form["review"]
     if not review or len(review) > 1500:
-        print("FAILED: review validation", len(review))
         abort(403)
 
     classes = []
     all_classes = reviews.get_all_classes()
-    print("ALLOWED CLASSES:", all_classes)
 
     for entry in request.form.getlist("classes"):
         if entry:
@@ -279,15 +281,12 @@ def update_item():
                 class_title = class_title.strip()
                 class_value = class_value.strip()
             except ValueError:
-                print("FAILED: class format", repr(entry))
                 abort(403)
 
             if class_title not in all_classes:
-                print("FAILED: unknown class title", repr(class_title))
                 abort(403)
 
             if class_value not in all_classes[class_title]:
-                print("FAILED: unknown class value", repr(class_value))
                 abort(403)
 
             classes.append((class_title, class_value))
@@ -323,6 +322,7 @@ def login():
         if user_id:
             session["user_id"] = user_id
             session["username"] = username
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
             flash("VIRHE: väärä tunnus tai salasana")

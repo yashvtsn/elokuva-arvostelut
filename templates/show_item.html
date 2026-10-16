@@ -52,18 +52,9 @@
     <label for="comment">Kommentti:</label>
     <br>
 
-    <textarea
-        id="comment"
-        name="comment"
-        rows="8"
-        cols="46"
-        maxlength="1500"
-        required></textarea>
-
-    <input
-        type="hidden"
-        name="review_id"
-        value="{{ item.id }}">
+    <textarea id="comment" name="comment" rows="8" cols="46" maxlength="1500" required></textarea>
+    <input type="hidden" name="review_id" value="{{ item.id }}">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
 
     <br>
     <input type="submit" value="Lähetä kommentti">
