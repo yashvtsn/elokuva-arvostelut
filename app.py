@@ -113,18 +113,21 @@ def create_item():
 
 @app.route("/create_comment", methods=["POST"])
 def create_comment():
+
     require_login()
-    comment = request.form["comment"].strip()
+
+    comment = request.form.get("comment", "").strip()
+    review_id = request.form.get("review_id", "")
+
+    review = reviews.get_item(review_id)
+
     if not comment or len(comment) > 1500:
         abort(403)
-
-    review_id = request.form["review_id"]
-    review = reviews.get_item(review_id)
     if not review:
         abort(403)
+
     user_id = session["user_id"]
     reviews.add_comment(review_id, user_id, comment)
-
     return redirect("/item/" + str(review_id))
 
 

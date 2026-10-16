@@ -8,7 +8,7 @@
 <p>{{ item.review }}</p>
 
 <p>
-    Kirjoittaja:
+    <b>Kirjoittaja:</b>
     <a href="/user/{{ item.user_id }}">{{ item.username }}</a>
 </p>
 
@@ -25,10 +25,10 @@
 {% endfor %}
 
 {% if classes %}
-    <h2>Luokat</h2>
+    <h3>Luokat</h3>
     <ul>
         {% for class in classes %}
-            <li>{{ class.title }}: {{ class.value }}</li>
+            <li><b>{{ class.title }}:</b> {{ class.value }}</li>
         {% endfor %}
     </ul>
 {% endif %}
@@ -39,18 +39,13 @@
     <ul>
         {% for comment in comments %}
             <li>
-                {{ comment.review_text }}
-                —
-                <a href="/user/{{ comment.user_id }}">
-                    {{ comment.username }}
-                </a>
-            </li>
+                {{ comment.review_text }}, <a href="/user/{{ comment.user_id }}"> {{ comment.username }}</a> </li>
         {% endfor %}
     </ul>
 {% else %}
     <p>Ei vielä kommentteja.</p>
 {% endif %}
-
+{% if session.user_id %}
 <h3>Uusi kommentti</h3>
 
 <form action="{{ url_for('create_comment') }}" method="post">
@@ -72,6 +67,7 @@
 
     <br>
     <input type="submit" value="Lähetä kommentti">
+  {% endif %}
 </form>
 
 {% endblock %}
