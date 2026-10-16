@@ -68,7 +68,15 @@ def get_classes(review_id):
     return db.query(sql, [review_id])
 
 def get_items():
-    sql = "SELECT id, title FROM reviews ORDER BY id DESC"
+    sql = """
+        SELECT reviews.id, reviews.title, reviews.review,
+               reviews.user_id, users.username, COUNT(comments.id) comments_count
+        FROM reviews
+        JOIN users ON reviews.user_id = users.id
+        LEFT JOIN comments ON reviews.id = comments.review_id
+        GROUP BY reviews.id
+        ORDER BY reviews.id DESC
+    """
     return db.query(sql)
 
 def get_item(item_id):
