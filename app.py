@@ -233,32 +233,56 @@ def remove_item(item_id):
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
+    print("UPDATE ROUTE REACHED")
+
     item_id = request.form["item_id"]
     item = reviews.get_item(item_id)
-    if not item: 
+
+    if not item:
         abort(404)
-    if item["user_id"] != session["user_id"]:
+
+    print("ITEM USER ID:", item["user_id"])
+    print("SESSION USER ID:", session.get("user_id"))
+
+    if item["user_id"] != session.get("user_id"):
+        print("FAILED: ownership check")
         abort(403)
+
     title = request.form["title"]
     if not title or len(title) > 50:
+        print("FAILED: title validation", repr(title), len(title))
         abort(403)
+
     review = request.form["review"]
     if not review or len(review) > 1500:
+        print("FAILED: review validation", len(review))
         abort(403)
 
     classes = []
     all_classes = reviews.get_all_classes()
+    print("ALLOWED CLASSES:", all_classes)
+
     for entry in request.form.getlist("classes"):
         if entry:
-            class_title, class_value = entry.split(":")
-            if class_title not in all_classes: 
+            try:
+                class_title, class_value = entry.split(":", 1)
+                class_title = class_title.strip()
+                class_value = class_value.strip()
+            except ValueError:
+                print("FAILED: class format", repr(entry))
                 abort(403)
+
+            if class_title not in all_classes:
+                print("FAILED: unknown class title", repr(class_title))
+                abort(403)
+
             if class_value not in all_classes[class_title]:
+                print("FAILED: unknown class value", repr(class_value))
                 abort(403)
+
             classes.append((class_title, class_value))
 
     reviews.update_item(item_id, title, review, classes)
-
     return redirect("/item/" + item_id)
 
 @app.route("/create", methods=["POST"])
