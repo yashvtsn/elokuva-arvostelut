@@ -46,6 +46,10 @@ def get_image(image_id):
     result = db.query(sql, [image_id])
     return result[0][0] if result else None
 
+def remove_image(review_id, image_id):
+    sql = "DELETE FROM images WHERE id = ? AND review_id = ?"
+    db.execute(sql, [image_id, review_id])
+
 
 def get_comments(review_id):
     sql = """

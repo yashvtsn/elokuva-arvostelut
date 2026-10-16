@@ -10,11 +10,24 @@
   <h1>Arvostelun kuvat</h1>
 
   <p>Arvostelussa on {{ images | count }} kuvaa</p>
+  <form action="/remove_image" method="post">
+        {% for image in images %}
+            <p>
+                <input type="checkbox" name="image_id" value="{{ image.id }}">
+                <img src="/image/{{ image.id }}" alt="Arvostelun kuva" width="300">
+            </p>
+        {% endfor %}
 
-  <p>
-  <a href="/item/{{ review.id }}">Takaisin arvosteluun</a>
-  </p>    
+        <input type="hidden" name="review_id" value="{{ review.id }}">
 
+        <p>
+            <input type="submit" value="Poista valitut kuvat">
+        </p>
+    </form>
+
+    <p>
+        <a href="/item/{{ review.id }}">Takaisin arvosteluun</a>
+    </p>
   <p>
     Lisää kuvia arvosteluun:
   </p>
@@ -26,7 +39,6 @@
     </p>
 
     <input type="hidden" name="review_id" value="{{ review.id }}" />
-
     <input type="submit" value="Lisää kuva" />
   </form>
 
