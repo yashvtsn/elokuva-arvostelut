@@ -6,18 +6,18 @@
   <h1>Uusi arvostelu</h1>
 <form action="/create_item" method="post">
   <p>
-    Elokuvan otsikko: <br />
-    <input type="text" name="title" maxlength = "50" required/>
+    <label for = "title">Elokuvan otsikko:</label> <br />
+    <input type="text" name="title" id = "title" maxlength = "50" required/>
   </p>
 
   <p>
-    Arvostelun teksti: <br />
-    <textarea name = "review" rows = "8" cols = "46" maxlength = "1500" required></textarea>
+    <label for = "review">Arvostelun teksti: </label><br />
+    <textarea name = "review" id = "review" rows = "8" cols = "46" maxlength = "1500" required></textarea>
     </p>
   {% for class in classes %}
   <p>
-    {{ class }}: <br />
-    <select name="classes">
+    <label for = "class"{{ class }}>{{ class }}: </label><br />
+    <select name="classes" id = "class"{{ class }}>
       <option value=""></option>
     {% for option in classes[class] %}
       <option value="{{ class }}: {{ option }}">{{ option }}</option>
