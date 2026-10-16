@@ -4,7 +4,7 @@
 
 {% block content %}
 <h1>Arvostelun poisto</h1>
-  <p>Arvostelu: {{ item.title }}</p>
+  <p>Arvostelu: <a href="/item/{{ item.id }}">{{ item.title }}</a></p>
   <p>Haluatko varmasti poistaa tämän arvostelun?</p>
 <form action="/remove_item/{{ item.id }}" method="post">
   <input type = "submit" name = "remove" value = "Poista arvostelu">

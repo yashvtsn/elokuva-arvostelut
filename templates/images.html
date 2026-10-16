@@ -4,7 +4,9 @@
 {% block title %}Arvostelun kuvat{% endblock %}
 
 {% block content %}
-<h1>Arvostelun kuvat</h1>
+<h2>{{ review.title }}</h2>
+<h3>Arvostelun kuvat</h3>
+
 
 <p>Arvostelussa on {{ images | count }} kuvaa</p>
 <form action="/remove_image" method="post">

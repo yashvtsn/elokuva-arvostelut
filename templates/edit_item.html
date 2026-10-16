@@ -3,7 +3,11 @@
 {% block title %}Arvostelun muokkaus{% endblock %}
 
 {% block content %}
-<h2>Arvostelun muokkaus</h2>
+<h2>{{ item.title }}</h2>
+<h3>Arvostelun muokkaus</h3>
+<p>
+  <a href="/item/{{ item.id }}">Takaisin arvosteluun</a>
+</p>
 
 <form action="/update_item" method="post">
   <p>
