@@ -5,6 +5,12 @@
 {% block content %}
 <h2>Kirjaudu sisään</h2>
 
+{% for message in get_flashed_messages() %}
+  <div class = "info">
+    {{ message }}
+  </div>
+  {% endfor %}
+
 <form action="/login" method="post">
 <p>
   Tunnus: <br />

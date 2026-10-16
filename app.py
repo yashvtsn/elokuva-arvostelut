@@ -1,6 +1,6 @@
 from flask import Flask
 import sqlite3
-from flask import abort, redirect, render_template, request, session, make_response
+from flask import abort, redirect, render_template, request, session, make_response, flash
 import config
 import reviews
 import users
@@ -78,11 +78,19 @@ def create_item():
     require_login()
 
     title = request.form["title"]
-    if not title or len(title) > 50:
-        abort(403)
+    if not title:
+        flash("VIRHE: otsikko puuttuu")
+        return redirect("/create_item/" + str(review_id))
+    if len(title) > 50:
+        flash("VIRHE: otsikko on liian pitkä")
+        return redirect("/create_item/" + str(review_id))
     review = request.form["review"]
-    if not review or len(review) > 1500:
-        abort(403)
+    if not review:
+        flash("VIRHE: arvostelu puuttuu")
+        return redirect("/create_item/" + str(review_id))
+    if len(review) > 1500:
+        flash("VIRHE: arvostelu on liian pitkä")
+        return redirect("/create_item/" + str(review_id))
     user_id = session["user_id"]
 
     all_classes = reviews.get_all_classes()
@@ -122,7 +130,7 @@ def create_comment():
     review = reviews.get_item(review_id)
 
     if not comment or len(comment) > 1500:
-        abort(403)
+        flash("VIRHE: Kommentti on liian pitkä")
     if not review:
         abort(403)
 
@@ -185,11 +193,13 @@ def add_image():
 
     file = request.files["image"]
     if not file.filename.endswith(".jpg"):
-        return "VIRHE: väärä tiedostomuoto"
+        flash("VIRHE: väärä tiedostomuoto")
+        return redirect("/images/" + str(review_id))
 
     image = file.read()
     if len(image) > 100 * 1024:
-        return "VIRHE: liian suuri kuva"
+        flash("VIRHE: liian suuri kuva")
+        return redirect("/images/" + str(review_id))
 
     reviews.add_image(review_id, image)
     return redirect("/images/" + str(review_id))
@@ -291,12 +301,14 @@ def create():
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        flash("VIRHE: salasanat eivät ole samat")
+        return redirect("/register")
 
     try:
         users.create_user(username, password1)
     except sqlite3.IntegrityError:
-        return "VIRHE: tunnus on jo varattu"
+        flash("VIRHE: tunnus on jo varattu")
+        return redirect("/register")
 
     return "Tunnus luotu"
 
@@ -313,7 +325,9 @@ def login():
             session["username"] = username
             return redirect("/")
         else:
-            return "VIRHE: väärä tunnus tai salasana"
+            flash("VIRHE: väärä tunnus tai salasana")
+            return redirect("/login")
+
 
 @app.route("/logout")
 def logout():

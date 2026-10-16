@@ -40,6 +40,11 @@ Lisää kuvia arvosteluun:
 <input type="hidden" name="review_id" value="{{ review.id }}" />
 <input type="submit" value="Lisää kuva" />
 </form>
+{% for message in get_flashed_messages() %}
+  <div class = "info">
+    {{ message }}
+  </div>
+  {% endfor %}
 {% endblock %}
 
 

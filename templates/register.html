@@ -4,6 +4,13 @@
 
 {% block content %}
 <h2>Luo tunnus</h2>
+
+{% for message in get_flashed_messages() %}
+  <div class = "info">
+    {{ message }}
+  </div>
+  {% endfor %}
+  
 <form action="/create" method="post">
   <p>
     Tunnus: <br />

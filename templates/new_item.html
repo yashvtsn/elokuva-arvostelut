@@ -4,6 +4,11 @@
 
 {% block content %}
   <h1>Uusi arvostelu</h1>
+  {% for message in get_flashed_messages() %}
+  <div class = "info">
+    {{ message }}
+  </div>
+  {% endfor %}
 <form action="/create_item" method="post">
   <p>
     Elokuvan otsikko: <br />
