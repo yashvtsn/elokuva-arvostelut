@@ -5,6 +5,10 @@
 {% block content %}
 
 <h1>{{ item.title }}</h1>
+{% for image in images %}
+    <img src="/image/{{ image.id }}" alt="Arvostelun kuva" width="300">
+{% endfor %}
+
 <p>{{ item.review }}</p>
 
 <p>
@@ -19,10 +23,6 @@
         <a href="/images/{{ item.id }}">Arvostelun kuvat</a>
     </p>
 {% endif %}
-
-{% for image in images %}
-    <img src="/image/{{ image.id }}" alt="Arvostelun kuva" width="300">
-{% endfor %}
 
 {% if classes %}
     <h3>Luokat</h3>
