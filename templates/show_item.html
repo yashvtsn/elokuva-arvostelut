@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h1>{{ item.title }}</h1>
+<h2>{{ item.title }}</h2>
 {% for image in images %}
     <img src="/image/{{ image.id }}" alt="Arvostelun kuva" width="300">
 {% endfor %}
@@ -38,7 +38,7 @@
 {% if comments %}
     {% for comment in comments %}
         <div class="review">
-            {{ comment.review_text }}<br />
+            { comment.review_text | show_lines }}<br />
             Kirjoittaja:
             <a href="/user/{{ comment.user_id }}">
                 {{ comment.username }}
@@ -62,7 +62,7 @@
 
     <br>
     <input type="submit" value="Lähetä kommentti">
-  {% endif %}
 </form>
+{% endif %}
 
 {% endblock %}

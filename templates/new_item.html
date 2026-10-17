@@ -3,26 +3,28 @@
 {% block title %}Uusi arvostelu{% endblock %}
 
 {% block content %}
-  <h1>Uusi arvostelu</h1>
+  <h2>Uusi arvostelu</h2>
 <form action="/create_item" method="post">
   <p>
     <label for = "title">Elokuvan otsikko:</label> <br />
-    <input type="text" name="title" id = "title" maxlength = "50" required/>
+    <input type="text" name="title" id="title" maxlength="50" required />
   </p>
 
   <p>
     <label for = "review">Arvostelun teksti: </label><br />
     <textarea name = "review" id = "review" rows = "8" cols = "46" maxlength = "1500" required></textarea>
     </p>
-  {% for class in classes %}
+    {% for class in classes %}
   <p>
-    <label for = "class"{{ class }}>{{ class }}: </label><br />
-    <select name="classes" id = "class"{{ class }}>
-      <option value=""></option>
-    {% for option in classes[class] %}
-      <option value="{{ class }}: {{ option }}">{{ option }}</option>
-    {% endfor %}
-    </select>
+    <label>
+      {{ class }}:<br />
+      <select name="classes">
+        <option value=""></option>
+        {% for option in classes[class] %}
+        <option value="{{ class }}: {{ option }}">{{ option }}</option>
+        {% endfor %}
+      </select>
+    </label>
   </p>
   {% endfor %}
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
