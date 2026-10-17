@@ -1,39 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="fi">
 
 <head>
-  <title>{% block title %}{% endblock %}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock %} - Elokuva-arvostelut</title>
   <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
+  <header>
+    <h1><a href="/">Elokuva-arvostelut</a></h1>
+  </header>
 
-  <h1>Elokuva-arvostelut</h1>
+  <nav>
+    <a href="/">Etusivu</a>
+    <a href="/find_item">Etsi arvostelu</a>
+    {% if session.user_id %}
+      <a href="/new_item">Uusi arvostelu</a>
+      <a href="/user/{{ session.user_id }}">Omat tiedot ({{ session.username }})</a>
+      <a href="/logout">Kirjaudu ulos</a>
+    {% else %}
+      <a href="/login">Kirjaudu sisään</a>
+      <a href="/register">Luo tunnus</a>
+    {% endif %}
+  </nav>
 
-
-  {% if session.user_id %}
-  <p>
-    Olet kirjautunut nimellä <a href="/user/{{ session.user_id }}">{{ session.username }}</a>
-  </p>
-  {% endif %}
-
-  <p>
-    <a href="/find_item">Etsi arvostelu</a> |
-    <a href="/">Etusivu</a> |
-  {% if session.user_id %}
-    <a href="/logout">Kirjaudu ulos</a> |
-    <a href="/new_item">Uusi arvostelu</a> |
-  {% else %}
-    <a href="/login">Kirjaudu sisään</a> |
-    <a href="/register">Luo tunnus</a> |
-  {% endif %}
-  </p>
-   {% for message in get_flashed_messages() %}
-  <div class = "info">
-    {{ message }}
-  </div>
+  {% for message in get_flashed_messages() %}
+    <div class="info">{{ message }}</div>
   {% endfor %}
+
+  <main>
     {% block content %}{% endblock %}
+  </main>
 </body>
 
 </html>

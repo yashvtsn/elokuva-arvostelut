@@ -36,15 +36,19 @@
 <h3>Kommentit</h3>
 
 {% if comments %}
-    <ul>
-        {% for comment in comments %}
-            <li>
-                {{ comment.review_text }}, <a href="/user/{{ comment.user_id }}"> {{ comment.username }}</a> </li>
-        {% endfor %}
-    </ul>
+    {% for comment in comments %}
+        <div class="review">
+            {{ comment.review_text }}<br />
+            Kirjoittaja:
+            <a href="/user/{{ comment.user_id }}">
+                {{ comment.username }}
+            </a>
+        </div>
+    {% endfor %}
 {% else %}
     <p>Ei vielä kommentteja.</p>
 {% endif %}
+
 {% if session.user_id %}
 <h3>Uusi kommentti</h3>
 

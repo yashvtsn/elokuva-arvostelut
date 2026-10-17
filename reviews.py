@@ -23,6 +23,8 @@ def add_item(title, review, user_id, classes):
     for title, value in classes:
         db.execute(sql, [review_id, title, value])
 
+    return review_id
+
 def add_comment(review_id, user_id, comment):
     sql = """INSERT INTO comments (review_id, user_id, review_text)
              VALUES (?, ?, ?)"""
@@ -102,7 +104,7 @@ def update_item(review_id, title, review, classes):
 
     sql = "DELETE FROM reviews_classes WHERE review_id = ?"
     db.execute(sql, [review_id])
-    
+
     sql = """INSERT INTO reviews_classes (review_id, title, value)
              VALUES (?, ?, ?)"""
     for class_title, value in classes:
